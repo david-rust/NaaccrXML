@@ -32,35 +32,7 @@ var w = 768, h=480, m=20, max = min = 0;
 //progression: progression = Percent that die during this period
 //prob: prob = Product of survival probabilities up to and including this period	
 
-data = {
-treatments: [ 
-	[
-		{ t: 6, d: 1, n: 23 },
-		{ t: 12, d: 1, n: 22 },
-		{ t: 21, d: 1, n: 21 },
-		{ t: 27, d: 1, n: 20 },
-		{ t: 32, d: 1, n: 19 },
-		{ t: 39, d: 1, n: 18 },
-		{ t: 43, d: 2, n: 16 },
-		{ t: 89, d: 1, n: 14 },
-		{ t: 261, d: 1, n: 8 },
-		{ t: 263, d: 1, n: 7 },
-		{ t: 270, d: 1, n: 6 },
-		{ t: 311, d: 1, n: 4 }
-	],
-	[
-		{ t: 9, d: 1, n: 23,},
-		{ t: 13, d: 1, n: 22,},
-		{ t: 27, d: 1, n: 21,},
-		{ t: 38, d: 1, n: 20,},
-		{ t: 49, d: 2, n: 18,},
-		{ t: 93, d: 1, n: 15,},
-		{ t: 126, d: 1, n: 12,},
-		{ t: 218, d: 1, n: 9, },
-		{ t: 301, d: 1, n: 5, },
-		{ t: 333, d: 1, n: 4, }
-	]
-]};
+d3.json("KM.json", function(data) {
 /* Computed Data progression, survival, prob, censored */
 for(var a=0; a<data.treatments.length; a++){
 	for (var b=0; b<data.treatments[a].length; b++){
@@ -74,7 +46,6 @@ for(var a=0; a<data.treatments.length; a++){
 		reed.censored = (reed.n < brad) ? true : false;
 	}	
 }
-console.log(data);
 /* Begin d3.js */
 //Scalar functions
 var x = d3.scale.linear().domain([0, max]).range([0,w-m*2]);
@@ -140,6 +111,46 @@ var blackCircles = kaplan.selectAll("circle.black")
 			   .attr("r", function(d){ if(d.censored == false){ return 0; }
 				   	else{ return 4; }
 			   });
+var pinkLine = kaplan.append("path")
+    .attr("d", lineFunction(data.treatments[2]))
+    .attr("stroke", "green")
+    .attr("stroke-width", 2)
+    .attr("fill", "none")
+    .attr("opacity", 0.7);
+var pinkCircles = kaplan.selectAll("circle.pink")
+			   .data(data.treatments[2])
+			   .enter()
+			   .append("circle")
+			   .attr("fill", "green")
+			   .attr("cx", function(d) {
+			   		return x(d.t)+2*m;
+			   })
+			   .attr("cy", function(d) {
+			   		return y(d.prob);
+			   })
+			   .attr("r", function(d){ if(d.censored == false){ return 0; }
+				   	else{ return 4; }
+			   });
+var grayLine = kaplan.append("path")
+	.attr("d", lineFunction(data.treatments[3]))
+	.attr("stroke", "blue")
+	.attr("stroke-width", 2)
+	.attr("fill", "none")
+	.attr("opacity", 0.7);
+var grayCircles = kaplan.selectAll("circle.gray")
+			   .data(data.treatments[3])
+			   .enter()
+			   .append("circle")
+			   .attr("fill", "blue")
+			   .attr("cx", function(d) {
+			   		return x(d.t)+2*m;
+			   })
+			   .attr("cy", function(d) {
+			   		return y(d.prob);
+			   })
+			   .attr("r", function(d){ if(d.censored == false){ return 0; }
+				   	else{ return 4; }
+			   });
 //Draw the x-axis
 var theXAxis = kaplan.append("g")
     .attr("class", "x axis")
@@ -150,6 +161,8 @@ var theYAxis = kaplan.append("g")
     .attr("class", "y axis")
     .attr("transform", "translate("+2*m+", "+m+")")
     .call(yAxis);
+
+});
 </script>
 </body>
 </html>
