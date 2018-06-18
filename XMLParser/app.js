@@ -90230,6 +90230,92 @@ Ext.define('Ext.chart.axis.Axis3D', {extend:Ext.chart.axis.Axis, xtype:'axis3d',
 }});
 Ext.define('Ext.chart.axis.Category3D', {extend:Ext.chart.axis.Axis3D, alias:'axis.category3d', type:'category3d', config:{layout:'combineDuplicate', segmenter:'names'}});
 Ext.define('Ext.chart.axis.Numeric3D', {extend:Ext.chart.axis.Axis3D, alias:['axis.numeric3d'], type:'numeric3d', config:{layout:'continuous', segmenter:'numeric', aggregator:'double'}});
+Ext.define('Ext.chart.interactions.ItemHighlight', {extend:Ext.chart.interactions.Abstract, type:'itemhighlight', alias:'interaction.itemhighlight', isItemHighlight:true, config:{gestures:{tap:'onTapGesture', mousemove:'onMouseMoveGesture', mousedown:'onMouseDownGesture', mouseup:'onMouseUpGesture', mouseleave:'onMouseUpGesture'}, sticky:false}, stickyHighlightItem:null, onMouseMoveGesture:function(e) {
+  var me = this, oldItem = me.oldItem, isMousePointer = e.pointerType === 'mouse', item, tooltip;
+  if (me.getSticky()) {
+    return true;
+  }
+  if (isMousePointer && me.stickyHighlightItem) {
+    me.stickyHighlightItem = null;
+    me.highlight(null);
+  }
+  if (me.isDragging) {
+    if (oldItem && isMousePointer) {
+      oldItem.series.hideTooltip(oldItem);
+      me.oldItem = null;
+    }
+  } else {
+    if (!me.stickyHighlightItem) {
+      item = me.getItemForEvent(e);
+      if (item !== me.getChart().getHighlightItem()) {
+        me.highlight(item);
+        me.sync();
+      }
+      if (isMousePointer) {
+        if (item) {
+          tooltip = item.series.getTooltip();
+          if (tooltip) {
+            if (oldItem && oldItem !== item && oldItem.series.getTooltip() !== tooltip) {
+              oldItem.series.hideTooltip(oldItem, true);
+            }
+            if (tooltip.getTrackMouse()) {
+              item.series.showTooltip(item, e);
+            } else {
+              me.showUntracked(item);
+            }
+            me.oldItem = item;
+          }
+        } else {
+          if (oldItem) {
+            oldItem.series.hideTooltip(oldItem);
+          }
+        }
+      }
+      return false;
+    }
+  }
+}, highlight:function(item) {
+  this.getChart().setHighlightItem(item);
+}, showTooltip:function(e, item) {
+  item.series.showTooltip(item, e);
+  this.oldItem = item;
+}, showUntracked:function(item) {
+  var marker = item.sprite.getMarker(item.category), surface, surfaceXY, isInverseY, itemBBox, matrix;
+  if (marker) {
+    surface = marker.getSurface();
+    isInverseY = surface.matrix.elements[3] < 0;
+    surfaceXY = surface.element.getXY();
+    itemBBox = Ext.clone(marker.getBBoxFor(item.index));
+    if (isInverseY) {
+      if (surface.getInherited().rtl) {
+        matrix = surface.inverseMatrix.clone().flipX().translate(item.sprite.attr.innerWidth, 0, true);
+      } else {
+        matrix = surface.inverseMatrix;
+      }
+      itemBBox = matrix.transformBBox(itemBBox);
+    }
+    itemBBox.x += surfaceXY[0];
+    itemBBox.y += surfaceXY[1];
+    item.series.showTooltipAt(item, itemBBox.x + itemBBox.width * 0.5, itemBBox.y + itemBBox.height * 0.5);
+  }
+}, onMouseDownGesture:function() {
+  this.isDragging = true;
+}, onMouseUpGesture:function() {
+  this.isDragging = false;
+}, isSameItem:function(a, b) {
+  return a && b && a.series === b.series && a.field === b.field && a.index === b.index;
+}, onTapGesture:function(e) {
+  var me = this;
+  if (e.pointerType === 'mouse' && !me.getSticky()) {
+    return;
+  }
+  var item = me.getItemForEvent(e);
+  if (me.isSameItem(me.stickyHighlightItem, item)) {
+    item = null;
+  }
+  me.stickyHighlightItem = item;
+  me.highlight(item);
+}});
 Ext.define('Ext.chart.interactions.Rotate', {extend:Ext.chart.interactions.Abstract, type:'rotate', alternateClassName:'Ext.chart.interactions.RotatePie3D', alias:['interaction.rotate', 'interaction.rotatePie3d'], config:{gesture:'rotate', gestures:{dragstart:'onGestureStart', drag:'onGesture', dragend:'onGestureEnd'}, rotation:0}, oldRotations:null, getAngle:function(e) {
   var me = this, chart = me.getChart(), xy = chart.getEventXY(e), center = chart.getCenter();
   return Math.atan2(xy[1] - center[1], xy[0] - center[0]);
