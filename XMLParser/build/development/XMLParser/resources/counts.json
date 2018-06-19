@@ -1,0 +1,357 @@
+{
+  "data": [
+    {
+      "sex": "1",
+      "count": 4546
+    },
+    {
+      "sex": "2",
+      "count": 5446
+    },
+    {
+      "primarySite": "C40",
+      "count": 1
+    },
+    {
+      "primarySite": "C11",
+      "count": 1
+    },
+    {
+      "primarySite": "C14",
+      "count": 1
+    },
+    {
+      "primarySite": "C31",
+      "count": 2
+    },
+    {
+      "primarySite": "C41",
+      "count": 16
+    },
+    {
+      "primarySite": "C70",
+      "count": 268
+    },
+    {
+      "primarySite": "C62",
+      "count": 42
+    },
+    {
+      "primarySite": "C38",
+      "count": 7
+    },
+    {
+      "primarySite": "C74",
+      "count": 2
+    },
+    {
+      "primarySite": "C44",
+      "count": 1180
+    },
+    {
+      "primarySite": "C23",
+      "count": 8
+    },
+    {
+      "primarySite": "C54",
+      "count": 326
+    },
+    {
+      "primarySite": "C76",
+      "count": 1
+    },
+    {
+      "primarySite": "C68",
+      "count": 1
+    },
+    {
+      "primarySite": "C03",
+      "count": 2
+    },
+    {
+      "primarySite": "C52",
+      "count": 4
+    },
+    {
+      "primarySite": "C13",
+      "count": 2
+    },
+    {
+      "primarySite": "C01",
+      "count": 16
+    },
+    {
+      "primarySite": "C00",
+      "count": 16
+    },
+    {
+      "primarySite": "C24",
+      "count": 10
+    },
+    {
+      "primarySite": "C12",
+      "count": 2
+    },
+    {
+      "primarySite": "C21",
+      "count": 45
+    },
+    {
+      "primarySite": "C66",
+      "count": 15
+    },
+    {
+      "primarySite": "C69",
+      "count": 19
+    },
+    {
+      "primarySite": "C07",
+      "count": 15
+    },
+    {
+      "primarySite": "C02",
+      "count": 24
+    },
+    {
+      "primarySite": "C73",
+      "count": 337
+    },
+    {
+      "primarySite": "C48",
+      "count": 8
+    },
+    {
+      "primarySite": "C22",
+      "count": 63
+    },
+    {
+      "primarySite": "C09",
+      "count": 20
+    },
+    {
+      "primarySite": "C04",
+      "count": 4
+    },
+    {
+      "primarySite": "C10",
+      "count": 2
+    },
+    {
+      "primarySite": "C77",
+      "count": 387
+    },
+    {
+      "primarySite": "C60",
+      "count": 9
+    },
+    {
+      "primarySite": "C15",
+      "count": 41
+    },
+    {
+      "primarySite": "C53",
+      "count": 49
+    },
+    {
+      "primarySite": "C19",
+      "count": 37
+    },
+    {
+      "primarySite": "C32",
+      "count": 73
+    },
+    {
+      "primarySite": "C51",
+      "count": 39
+    },
+    {
+      "primarySite": "C18",
+      "count": 409
+    },
+    {
+      "primarySite": "C56",
+      "count": 59
+    },
+    {
+      "primarySite": "C64",
+      "count": 327
+    },
+    {
+      "primarySite": "C67",
+      "count": 537
+    },
+    {
+      "primarySite": "C17",
+      "count": 27
+    },
+    {
+      "primarySite": "C06",
+      "count": 6
+    },
+    {
+      "primarySite": "C49",
+      "count": 27
+    },
+    {
+      "primarySite": "C61",
+      "count": 1213
+    },
+    {
+      "primarySite": "C20",
+      "count": 98
+    },
+    {
+      "primarySite": "C80",
+      "count": 80
+    },
+    {
+      "primarySite": "C42",
+      "count": 646
+    },
+    {
+      "primarySite": "C16",
+      "count": 66
+    },
+    {
+      "primarySite": "C05",
+      "count": 7
+    },
+    {
+      "primarySite": "C25",
+      "count": 106
+    },
+    {
+      "primarySite": "C65",
+      "count": 21
+    },
+    {
+      "primarySite": "C34",
+      "count": 890
+    },
+    {
+      "primarySite": "C50",
+      "count": 2052
+    },
+    {
+      "primarySite": "C37",
+      "count": 2
+    },
+    {
+      "primarySite": "C08",
+      "count": 4
+    },
+    {
+      "primarySite": "C75",
+      "count": 117
+    },
+    {
+      "primarySite": "C72",
+      "count": 79
+    },
+    {
+      "primarySite": "C26",
+      "count": 3
+    },
+    {
+      "primarySite": "C71",
+      "count": 121
+    },
+    {
+      "vitalStatus": "4",
+      "count": 156
+    },
+    {
+      "vitalStatus": "0",
+      "count": 1085
+    },
+    {
+      "vitalStatus": "1",
+      "count": 8751
+    },
+    {
+      "ageAtDiagnosis": "<18",
+      "count": 18
+    },
+    {
+      "ageAtDiagnosis": "18-65",
+      "count": 47
+    },
+    {
+      "ageAtDiagnosis": ">65",
+      "count": 35
+    },
+    {
+      "race1": "14",
+      "count": 4
+    },
+    {
+      "race1": "07",
+      "count": 3
+    },
+    {
+      "race1": "16",
+      "count": 18
+    },
+    {
+      "race1": "10",
+      "count": 20
+    },
+    {
+      "race1": "03",
+      "count": 24
+    },
+    {
+      "race1": "97",
+      "count": 5
+    },
+    {
+      "race1": "05",
+      "count": 21
+    },
+    {
+      "race1": "98",
+      "count": 37
+    },
+    {
+      "race1": "96",
+      "count": 55
+    },
+    {
+      "race1": "99",
+      "count": 227
+    },
+    {
+      "race1": "13",
+      "count": 1
+    },
+    {
+      "race1": "08",
+      "count": 13
+    },
+    {
+      "race1": "06",
+      "count": 50
+    },
+    {
+      "race1": "02",
+      "count": 1014
+    },
+    {
+      "race1": "04",
+      "count": 58
+    },
+    {
+      "race1": "15",
+      "count": 12
+    },
+    {
+      "race1": "01",
+      "count": 8429
+    },
+    {
+      "race1": "17",
+      "count": 1
+    }
+  ],
+  "success": true
+}
