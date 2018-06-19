@@ -1,0 +1,69 @@
+{
+    "type": "arraystore",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "data": [
+            "[",
+            "    {",
+            "        \"value\": 10,",
+            "        \"translation\":\"TEST\"",
+            "    },",
+            "    {",
+            "        \"value\": 42,",
+            "        \"translation\":\"TEST2\"",
+            "    },",
+            "    {",
+            "        \"value\": 42,",
+            "        \"translation\":\"TEST3\"",
+            "    }",
+            "]"
+        ],
+        "designer|userClassName": "ageAtDiagnosis",
+        "storeId": "ageAtDiagnosis"
+    },
+    "configAlternates": {
+        "data": "array",
+        "designer|userClassName": "string",
+        "storeId": "string"
+    },
+    "name": "race",
+    "designerId": "3612bcf2-0bbc-44f3-a4b8-6a507ddcdff3",
+    "cn": [
+        {
+            "type": "Ext.data.field.Field",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "value"
+            },
+            "configAlternates": {
+                "name": "string"
+            },
+            "name": "MyField4",
+            "designerId": "edf3f6b0-6f7b-45d7-8552-7727c1979f4d"
+        },
+        {
+            "type": "Ext.data.field.Field",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "translation"
+            },
+            "configAlternates": {
+                "name": "string"
+            },
+            "name": "MyField5",
+            "designerId": "cf5213f2-06f6-476b-a039-7abef30274d1"
+        }
+    ]
+}

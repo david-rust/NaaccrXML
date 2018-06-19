@@ -1,0 +1,65 @@
+{
+    "type": "arraystore",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "data": [
+            "[",
+            "    {",
+            "        \"value\": 1,",
+            "        \"translation\":\"Male\"",
+            "    },",
+            "    {",
+            "        \"value\": 2,",
+            "        \"translation\":\"Female\"",
+            "    }",
+            "]"
+        ],
+        "designer|userClassName": "vitalStatus",
+        "storeId": "vitalStatus"
+    },
+    "configAlternates": {
+        "data": "array",
+        "designer|userClassName": "string",
+        "storeId": "string"
+    },
+    "name": "sex2",
+    "designerId": "83a53fec-b236-4c12-9c05-a70b9eb8bf1b",
+    "cn": [
+        {
+            "type": "Ext.data.field.Field",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "value"
+            },
+            "configAlternates": {
+                "name": "string"
+            },
+            "name": "MyField4",
+            "designerId": "0705e5ea-d715-40de-b7dc-42c700d51ff6"
+        },
+        {
+            "type": "Ext.data.field.Field",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "translation"
+            },
+            "configAlternates": {
+                "name": "string"
+            },
+            "name": "MyField6",
+            "designerId": "d0b19bf6-4aa9-47cb-a964-7fd6a7926bb3"
+        }
+    ]
+}
