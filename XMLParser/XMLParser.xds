@@ -1,0 +1,63 @@
+{
+    "name": "XMLParser",
+    "settings": {
+        "cmd": {
+            "license": "commercial",
+            "cmdVersion": "6.5.3.6",
+            "frameworkVersion": "6.5.3.57"
+        },
+        "urlPrefixTemplate": "http://localhost:{port}/{path}",
+        "urlPrefix": "http://localhost:50486/",
+        "canvasControls": {
+            "viewportSize": {
+                "name": "Large",
+                "builtIn": true,
+                "height": 1024,
+                "width": 1280
+            }
+        },
+        "exportPath": "",
+        "spacesToIndent": 4,
+        "sdkPath": "",
+        "lineEnding": "CRLF",
+        "genTimestamps": false,
+        "cacheBust": false,
+        "buildShouldOverwriteIndex": true,
+        "generateArchitectVersion": true,
+        "lastBuildSelection": {
+            "value": "webBuild",
+            "display": "Build web app",
+            "buildPlatform": false
+        }
+    },
+    "xdsVersion": "4.2.3",
+    "xdsBuild": 371,
+    "schemaVersion": 1,
+    "upgradeVersion": 310000000001,
+    "framework": "ext65",
+    "viewOrderMap": {
+        "view": [
+            "1bf08922-52b0-4a51-936d-d61a38fd431e",
+            "9e62f41e-b7ad-4467-a07d-965facb23b9d",
+            "c72bceba-c9fb-4b8d-9de7-e3e146159683"
+        ],
+        "store": [
+            "ebedb2c2-ea98-4334-ae6e-c80bb0123903",
+            "68879ef5-3631-42c2-91c0-06fd7dc7c861",
+            "83a53fec-b236-4c12-9c05-a70b9eb8bf1b",
+            "ef175959-11d4-4824-a047-43d5fb0a94fd",
+            "bc55f7ce-48fe-4530-8039-52f3ebb74e53",
+            "3612bcf2-0bbc-44f3-a4b8-6a507ddcdff3"
+        ],
+        "controller": [],
+        "model": [],
+        "resource": [
+            "6f6a1890-1020-4716-8aa4-b48dd2027e5d",
+            "40106003-f349-4b67-8ea3-fb34bd067451",
+            "c344ec4b-8f26-45f0-9c15-5ec1021a68d8"
+        ],
+        "app": [
+            "application"
+        ]
+    }
+}

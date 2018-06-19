@@ -1,0 +1,1730 @@
+{
+    "type": "Ext.container.Viewport",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|initialView": true,
+        "designer|userAlias": "xmlparserviewport",
+        "designer|userClassName": "XMLParserViewport",
+        "height": 250,
+        "layout": "border",
+        "width": 400
+    },
+    "configAlternates": {
+        "designer|initialView": "boolean",
+        "designer|userAlias": "string",
+        "designer|userClassName": "string",
+        "height": "auto",
+        "layout": "string",
+        "width": "auto"
+    },
+    "name": "MyViewport",
+    "designerId": "1bf08922-52b0-4a51-936d-d61a38fd431e",
+    "viewControllerInstanceId": "c72bceba-c9fb-4b8d-9de7-e3e146159683",
+    "viewModelInstanceId": "9e62f41e-b7ad-4467-a07d-965facb23b9d",
+    "cn": [
+        {
+            "type": "Ext.tree.Panel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "displayField": "description",
+                "itemId": "xmlTreePanel",
+                "layout|region": "center",
+                "rootVisible": false,
+                "store": "MyTreeStore",
+                "title": "Query Items"
+            },
+            "configAlternates": {
+                "displayField": "datafield",
+                "itemId": "string",
+                "layout|region": "string",
+                "rootVisible": "boolean",
+                "store": "store",
+                "title": "string"
+            },
+            "name": "MyTreePanel",
+            "designerId": "547f0b6b-4b4d-48d8-a898-14e140ce7e76",
+            "cn": [
+                {
+                    "type": "Ext.tree.View",
+                    "reference": {
+                        "name": "viewConfig",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "width": 51
+                    },
+                    "configAlternates": {
+                        "width": "auto"
+                    },
+                    "name": "MyTreeView1",
+                    "designerId": "f60a84aa-ce6b-43d4-8447-4e584c037e5a"
+                },
+                {
+                    "type": "viewcontrollereventbinding",
+                    "reference": {
+                        "name": "listeners",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "fn": "onTreepanelCheckChange",
+                        "implHandler": [
+                            "var mongoQuery = this.checkChange();",
+                            "this.update(mongoQuery);",
+                            "",
+                            "/*var treePanel = this.getView().down(\"#xmlTreePanel\");",
+                            "var rootNode = treePanel.getRootNode();",
+                            "var groups = {};",
+                            "var leafIndex = 0, nodeIndex=0;",
+                            "var leavesChecked = 0;",
+                            "//begin first and",
+                            "var mongoQuery = \"{ \\\"$and\\\":[\";",
+                            "var andedNodes = [];",
+                            "var filter = { \"$and\":[]};",
+                            "groups.patientLevel = [];",
+                            "",
+                            "//Tree is only two children deep, so calling eachChild twice will be sufficient to iterate through all nodes",
+                            "rootNode.eachChild(function(rootChild){",
+                            "",
+                            "    columns = [];",
+                            "    var nodeClause = \"\";",
+                            "    var values = \"\";",
+                            "    var valArr = [];",
+                            "",
+                            "    if(rootChild.hasChildNodes())",
+                            "    {",
+                            "        if(rootChild.getData().comparator == \"IN\")",
+                            "        {",
+                            "            nodeClause += \" { \\\"\"+rootChild.getData().naaccrId+ \"\\\": { \\\"$in\\\": [\";",
+                            "",
+                            "            rootChild.eachChild(function(leaf)",
+                            "            {",
+                            "                if(leaf.getData().checked)",
+                            "                {",
+                            "                   if(!Ext.isEmpty(values))",
+                            "                   {",
+                            "                        values += \", \";",
+                            "                   }",
+                            "                   values += \"\\\"\"+leaf.getData().value+\"\\\"\";",
+                            "                   valArr.push(leaf.getData().value);",
+                            "                   leavesChecked++;",
+                            "                }",
+                            "            });",
+                            "            nodeClause += values + \"]}} \";",
+                            "            if(leavesChecked === 0)",
+                            "            {",
+                            "                nodeClause = \"\";",
+                            "            }",
+                            "            else",
+                            "            {",
+                            "                andedNodes.push(nodeClause);",
+                            "                filter[\"$and\"].push({\"$in\":valArr});",
+                            "            }",
+                            "            mongoQuery += nodeClause;",
+                            "",
+                            "",
+                            "        }",
+                            "        else if(rootChild.getData().comparator == \"RANGE\")",
+                            "        {",
+                            "            var rootChildOperand = (rootChild.getData().operand == \"OR\") ? \"\\\"$or\\\"\" : \"\\\"$and\\\"\";",
+                            "            nodeClause += \"{ \"+rootChildOperand+\": [\";",
+                            "            rootChild.eachChild(function(leaf)",
+                            "            {",
+                            "                if(leaf.getData().checked)",
+                            "                {",
+                            "                   if(!Ext.isEmpty(values))",
+                            "                   {",
+                            "                        values += \", \";",
+                            "                   }",
+                            "                   if(leaf.getData().comparator == \"RANGE\")",
+                            "                   {",
+                            "                       values += \"{ \\\"$and\\\" : [\";",
+                            "                       values += \"{ \\\"\"+rootChild.getData().naaccrId +\"\\\": { \\\"$gte\\\": \"+leaf.getData().start+\"} },\";",
+                            "                       values += \"{ \\\"\"+rootChild.getData().naaccrId +\"\\\": { \\\"$lte\\\": \"+leaf.getData().end+\"} }\";",
+                            "                       values += \"]} \";",
+                            "                       var gte = {\"$gte\":leaf.getData().start};",
+                            "                       var lte = {\"$lte\":leaf.getData().end};",
+                            "                       var key = rootChild.getData().naaccrId;",
+                            "                       valArr.push({key:gte});",
+                            "                       valArr.push({key:lte});",
+                            "                   }",
+                            "                   else",
+                            "                   {",
+                            "                       values += \" { \\\"\"+rootChild.getData().naaccrId+\"\\\": {\\\"\"+leaf.getData().comparator+\"\\\":\"+leaf.getData().value+\"}}\";",
+                            "                       var okey = rootChild.getData().naaccrId;",
+                            "                       var compKey = leaf.getData().comparator;",
+                            "                       valArr.push({okey:{compKey:leaf.getData().value}});",
+                            "                   }",
+                            "                   leavesChecked++;",
+                            "                }",
+                            "            });",
+                            "            nodeClause += values + \"]} \";",
+                            "            if(leavesChecked === 0)",
+                            "            {",
+                            "                nodeClause = \"\";",
+                            "            }",
+                            "            else{",
+                            "            andedNodes.push(nodeClause);",
+                            "                filter[\"$and\"].push({\"$in\":valArr});",
+                            "",
+                            "            }",
+                            "            mongoQuery += nodeClause;",
+                            "        }",
+                            "",
+                            "        leavesChecked=0;",
+                            "    }",
+                            "",
+                            "",
+                            "",
+                            "});",
+                            "",
+                            "",
+                            "",
+                            "//Close first and",
+                            "mongoQuery +=\"] }\";",
+                            "mongoQuery = \"{ \\\"$and\\\": [\" +andedNodes.join(\", \") +\" ]}\";",
+                            "//console.log(\"Mongo Query :\" + mongoQuery);",
+                            "console.log(\"Other Query :{ \\\"$and\\\": [\" +andedNodes.join(\", \") +\" ]}\");",
+                            "//this.updateCounts();",
+                            "//this.refreshCharts();",
+                            "debugger;",
+                            "if(mongoQuery == \"{ \\\"$and\\\": [ ]}\")",
+                            "{",
+                            "    mongoQuery =\"\";",
+                            "}",
+                            "this.makeRequest(mongoQuery);",
+                            "",
+                            "//Really pass mongo query to ajax request",
+                            "",
+                            "return mongoQuery;*/"
+                        ],
+                        "name": "checkchange",
+                        "scope": "me"
+                    },
+                    "configAlternates": {
+                        "fn": "string",
+                        "implHandler": "code",
+                        "name": "string",
+                        "scope": "string"
+                    },
+                    "name": "onTreepanelCheckChange",
+                    "designerId": "66085e70-8235-41c7-99e0-6e2c4fe09404"
+                },
+                {
+                    "type": "Ext.toolbar.Toolbar",
+                    "reference": {
+                        "name": "dockedItems",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "dock": "top"
+                    },
+                    "configAlternates": {
+                        "dock": "string"
+                    },
+                    "name": "MyToolbar",
+                    "designerId": "20b854a0-944a-4a61-8033-ced47235621b",
+                    "cn": [
+                        {
+                            "type": "Ext.button.Button",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "layout|flex": null,
+                                "text": "Check All"
+                            },
+                            "configAlternates": {
+                                "layout|flex": "number",
+                                "text": "string"
+                            },
+                            "name": "MyButton",
+                            "designerId": "aaa3376f-353f-4c3f-b624-a2c14f0990c0",
+                            "cn": [
+                                {
+                                    "type": "viewcontrollereventbinding",
+                                    "reference": {
+                                        "name": "listeners",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fn": "onCheckAllClick",
+                                        "implHandler": [
+                                            "this.checkButtons(true);",
+                                            "var mongoQuery = this.checkChange();",
+                                            "this.update(mongoQuery);"
+                                        ],
+                                        "name": "click",
+                                        "scope": "me"
+                                    },
+                                    "configAlternates": {
+                                        "fn": "string",
+                                        "implHandler": "code",
+                                        "name": "string",
+                                        "scope": "string"
+                                    },
+                                    "name": "onCheckAllClick",
+                                    "designerId": "964073f2-c736-40f8-bc61-4007d8cba353"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Ext.button.Button",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "layout|flex": null,
+                                "text": "Uncheck All"
+                            },
+                            "configAlternates": {
+                                "layout|flex": "number",
+                                "text": "string"
+                            },
+                            "name": "MyButton1",
+                            "designerId": "c74d7fc7-681d-4398-a49f-51596990a3d1",
+                            "cn": [
+                                {
+                                    "type": "viewcontrollereventbinding",
+                                    "reference": {
+                                        "name": "listeners",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fn": "onUncheckAllButtonClick",
+                                        "implHandler": [
+                                            "this.checkButtons(false);",
+                                            "var mongoQuery = this.checkChange();",
+                                            "this.update(mongoQuery);"
+                                        ],
+                                        "name": "click",
+                                        "scope": "me"
+                                    },
+                                    "configAlternates": {
+                                        "fn": "string",
+                                        "implHandler": "code",
+                                        "name": "string",
+                                        "scope": "string"
+                                    },
+                                    "name": "onUncheckAllButtonClick",
+                                    "designerId": "41343e9b-ca69-45ae-9f4f-5fa2e29474db"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Ext.button.Button",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "itemId": "Export",
+                                "layout|flex": null,
+                                "text": "Download Result"
+                            },
+                            "configAlternates": {
+                                "itemId": "string",
+                                "layout|flex": "number",
+                                "text": "string"
+                            },
+                            "name": "MyButton2",
+                            "designerId": "fb3c184c-df01-445d-b518-1fa4bab4b11e",
+                            "cn": [
+                                {
+                                    "type": "viewcontrollereventbinding",
+                                    "reference": {
+                                        "name": "listeners",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fn": "onExportClick",
+                                        "implHandler": [
+                                            "var mongoQuery = this.checkChange();",
+                                            "var controller = this;",
+                                            "var params = {};",
+                                            "if(!Ext.isEmpty(mongoQuery))",
+                                            "{",
+                                            "    filter = \"?filter=\"+mongoQuery;",
+                                            "}",
+                                            "else",
+                                            "{",
+                                            "    filter = \"\";",
+                                            "}",
+                                            "",
+                                            "var downloadUrl = 'http://52.90.197.198:5000/export/'+filter;",
+                                            "",
+                                            "if(Ext.getElementById('hiddenform-iframe')!=null)",
+                                            "{",
+                                            "    Ext.removeNode(Ext.getElementById('hiddenform-iframe'));",
+                                            "}",
+                                            "",
+                                            "if(Ext.getElementById('hiddenform-form')!=null)",
+                                            "{",
+                                            "    Ext.removeNode(Ext.getElementById('hiddenform-form'));",
+                                            "}",
+                                            "",
+                                            "",
+                                            "",
+                                            "var body = Ext.getBody();",
+                                            "",
+                                            "var frame = body.createChild({",
+                                            "tag:'iframe',",
+                                            "cls:'x-hidden',",
+                                            "id:'hiddenform-iframe',",
+                                            "name:'iframe'",
+                                            "});",
+                                            "",
+                                            "var form = body.createChild({",
+                                            "tag:'form',",
+                                            "cls:'x-hidden',",
+                                            "id:'hiddenform-form',",
+                                            "action: downloadUrl,",
+                                            "target:'iframe'",
+                                            "});",
+                                            "",
+                                            "form.dom.submit();",
+                                            "",
+                                            "",
+                                            "/*",
+                                            "",
+                                            "if(Ext.getElementById('export_iframe')!=null)",
+                                            "{",
+                                            "    Ext.removeNode(Ext.getElementById('export_iframe'));",
+                                            "}",
+                                            "",
+                                            "if(Ext.getElementById('form')!=null)",
+                                            "{",
+                                            "    Ext.removeNode(Ext.getElementById('form'));",
+                                            "}",
+                                            "",
+                                            "var frame = Ext.getBody().createChild(",
+                                            "    {",
+                                            "        tag:'iframe',",
+                                            "        cls:'x-hidden',",
+                                            "        id:'export_iframe',",
+                                            "        name:'export_iframe'",
+                                            "",
+                                            "    });",
+                                            "",
+                                            "",
+                                            "var iframeForm = Ext.getBody().createChild(",
+                                            "    {",
+                                            "        tag:'form',",
+                                            "        cls:'x-hidden',",
+                                            "        id:'form',",
+                                            "        action: Ext.htmlEncode(encodeURI(downloadUrl)),",
+                                            "        target:'export_iframe',",
+                                            "        method: 'POST'",
+                                            "    });",
+                                            "",
+                                            "",
+                                            "iframeForm.dom.submit();*/",
+                                            ""
+                                        ],
+                                        "name": "click",
+                                        "scope": "me"
+                                    },
+                                    "configAlternates": {
+                                        "fn": "string",
+                                        "implHandler": "code",
+                                        "name": "string",
+                                        "scope": "string"
+                                    },
+                                    "name": "onExportClick",
+                                    "designerId": "ba5efa45-da3f-49f9-a6fb-4271cfd59019"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.selection.RowModel",
+                    "reference": {
+                        "name": "selModel",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "name": "MyRowSelectionModel",
+                    "designerId": "527fe7d7-587e-4123-9030-fa94eb5dcb6e"
+                }
+            ]
+        },
+        {
+            "type": "Ext.tab.Panel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "activeTab": 0,
+                "itemId": "tabPanel",
+                "layout|region": "east",
+                "layout|split": true,
+                "width": "80%"
+            },
+            "configAlternates": {
+                "activeTab": "auto",
+                "layout|region": "string",
+                "layout|split": "boolean",
+                "width": "auto",
+                "itemId": "string"
+            },
+            "name": "MyTabPanel",
+            "designerId": "e8222b73-5031-44e3-83ba-86a54529d045",
+            "cn": [
+                {
+                    "type": "Ext.panel.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "container|align": "stretch",
+                        "layout": "vbox",
+                        "title": "ExtJS Charts"
+                    },
+                    "configAlternates": {
+                        "container|align": "string",
+                        "layout": "string",
+                        "title": "string"
+                    },
+                    "name": "MyPanel4",
+                    "designerId": "f1d9f738-79be-4607-8c8e-d864e6510b75",
+                    "cn": [
+                        {
+                            "type": "Ext.tab.Tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "TabConfig4",
+                            "designerId": "747bea0e-2882-462c-8f6d-f2c778126116"
+                        },
+                        {
+                            "type": "Ext.container.Container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "container|align": "stretch",
+                                "layout": "hbox",
+                                "layout|flex": 1
+                            },
+                            "configAlternates": {
+                                "container|align": "string",
+                                "layout": "string",
+                                "layout|flex": "number"
+                            },
+                            "name": "MyContainer",
+                            "designerId": "a0f61021-539e-41b6-843f-b1078b706b0a",
+                            "cn": [
+                                {
+                                    "type": "Ext.chart.PolarChart",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "captions": [
+                                            "{",
+                                            "    title: '% Cases By Sex'",
+                                            " }"
+                                        ],
+                                        "colors": [
+                                            "[\"#115fa6\", \"#94ae0a\", \"#a61120\", \"#ff8809\", \"#ffd13e\", \"#a61187\", \"#24ad9a\", \"#7c7474\", \"#a66111\"]"
+                                        ],
+                                        "flex": 1,
+                                        "height": 300,
+                                        "innerPadding": 20,
+                                        "itemId": "pie1",
+                                        "reference": "pie1",
+                                        "store": "sex",
+                                        "width": 400
+                                    },
+                                    "configAlternates": {
+                                        "captions": "object",
+                                        "colors": "array",
+                                        "flex": "number",
+                                        "height": "auto",
+                                        "innerPadding": "number",
+                                        "itemId": "string",
+                                        "reference": "string",
+                                        "store": "store",
+                                        "width": "auto"
+                                    },
+                                    "name": "MyPieChart3D",
+                                    "designerId": "961dd8c5-8515-4eb9-9b17-bdd312e52bc6",
+                                    "isBuiltIn": true,
+                                    "iconCls": "icon-pie3d-chart",
+                                    "autoName": "MyPieChart3D",
+                                    "cn": [
+                                        {
+                                            "type": "Ext.chart.series.Pie3D",
+                                            "reference": {
+                                                "name": "series",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "angleField": "value",
+                                                "highlight": true,
+                                                "label": [
+                                                    "{",
+                                                    "display: 'none',",
+                                                    "field: 'translation'",
+                                                    "",
+                                                    "",
+                                                    "}"
+                                                ],
+                                                "tooltip": [
+                                                    "{",
+                                                    "",
+                                                    "trackMouse: true,",
+                                                    "renderer: function(tooltip, record, item){",
+                                                    "",
+                                                    "",
+                                                    "var total = 0;",
+                                                    "",
+                                                    "record.store.each(function(rec){",
+                                                    "    total += rec.get(\"value\");",
+                                                    "});",
+                                                    "",
+                                                    "",
+                                                    "tooltip.setHtml(record.get('translation') + ': ' + Math.round(record.get('value')/ total * 100) + '%');",
+                                                    "}",
+                                                    "",
+                                                    "}"
+                                                ]
+                                            },
+                                            "configAlternates": {
+                                                "angleField": "datafield",
+                                                "highlight": "boolean",
+                                                "label": "object",
+                                                "tooltip": "object"
+                                            },
+                                            "name": "MyPie3DSeries1",
+                                            "designerId": "c3982f08-ba5d-4c38-928d-3db792187dd3"
+                                        },
+                                        {
+                                            "type": "Ext.chart.interactions.Rotate",
+                                            "reference": {
+                                                "name": "interactions",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "name": "MyRotatePie3DInteraction6",
+                                            "designerId": "210a015d-07c4-4785-b606-8f754848eabc"
+                                        },
+                                        {
+                                            "type": "Ext.chart.legend.Legend",
+                                            "reference": {
+                                                "name": "legend",
+                                                "type": "object"
+                                            },
+                                            "codeClass": null,
+                                            "name": "MyLegend",
+                                            "designerId": "c9f0cb78-1e47-4534-b9be-9170fa6c8977"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Ext.chart.PolarChart",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "captions": [
+                                            "{",
+                                            "    title: '% Cases By Vital Status'",
+                                            " }"
+                                        ],
+                                        "colors": [
+                                            "[\"#115fa6\", \"#94ae0a\", \"#a61120\", \"#ff8809\", \"#ffd13e\", \"#a61187\", \"#24ad9a\", \"#7c7474\", \"#a66111\"]"
+                                        ],
+                                        "flex": 1,
+                                        "height": 300,
+                                        "innerPadding": 20,
+                                        "itemId": "pie3",
+                                        "reference": "pie3",
+                                        "store": "vitalStatus",
+                                        "width": 400
+                                    },
+                                    "configAlternates": {
+                                        "captions": "object",
+                                        "colors": "array",
+                                        "flex": "number",
+                                        "height": "auto",
+                                        "innerPadding": "number",
+                                        "itemId": "string",
+                                        "reference": "string",
+                                        "store": "store",
+                                        "width": "auto"
+                                    },
+                                    "name": "MyPieChart3D3",
+                                    "designerId": "3e95bd85-b1c6-49f1-8050-b823508d3d6e",
+                                    "isBuiltIn": true,
+                                    "iconCls": "icon-pie3d-chart",
+                                    "autoName": "MyPieChart3D",
+                                    "cn": [
+                                        {
+                                            "type": "Ext.chart.series.Pie3D",
+                                            "reference": {
+                                                "name": "series",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "angleField": "value",
+                                                "highlight": true,
+                                                "label": [
+                                                    "{",
+                                                    "display: 'none',",
+                                                    "field: 'translation'",
+                                                    "}"
+                                                ],
+                                                "tooltip": [
+                                                    "{",
+                                                    "",
+                                                    "trackMouse: true,",
+                                                    "renderer: function(tooltip, record, item){",
+                                                    "",
+                                                    "",
+                                                    "var total = 0;",
+                                                    "",
+                                                    "record.store.each(function(rec){",
+                                                    "    total += rec.get(\"value\");",
+                                                    "});",
+                                                    "",
+                                                    "",
+                                                    "tooltip.setHtml(record.get('translation') + ': ' + Math.round(record.get('value')/ total * 100) + '%');",
+                                                    "}",
+                                                    "",
+                                                    "}"
+                                                ]
+                                            },
+                                            "configAlternates": {
+                                                "angleField": "datafield",
+                                                "highlight": "boolean",
+                                                "label": "object",
+                                                "tooltip": "object"
+                                            },
+                                            "name": "MyPie3DSeries3",
+                                            "designerId": "972147cd-1ca4-4d45-928e-250a4809f5d9"
+                                        },
+                                        {
+                                            "type": "Ext.chart.interactions.Rotate",
+                                            "reference": {
+                                                "name": "interactions",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "name": "MyRotatePie3DInteraction8",
+                                            "designerId": "d854d31c-88c6-461f-88d2-60523a6b3f0e"
+                                        },
+                                        {
+                                            "type": "Ext.chart.legend.Legend",
+                                            "reference": {
+                                                "name": "legend",
+                                                "type": "object"
+                                            },
+                                            "codeClass": null,
+                                            "name": "MyLegend2",
+                                            "designerId": "82a0a927-fc87-4109-a06b-6c40bafcda2c"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Ext.container.Container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "container|align": "stretch",
+                                "layout": "hbox",
+                                "layout|flex": 1
+                            },
+                            "configAlternates": {
+                                "container|align": "string",
+                                "layout": "string",
+                                "layout|flex": "number"
+                            },
+                            "name": "MyContainer1",
+                            "designerId": "970ee98f-4362-437a-bc2b-9ce56b9abdb2",
+                            "cn": [
+                                {
+                                    "type": "Ext.chart.CartesianChart",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "captions": [
+                                            "{",
+                                            " title: '# of Cases By Race'",
+                                            "",
+                                            "}"
+                                        ],
+                                        "flex": 1,
+                                        "height": 250,
+                                        "insetPadding": [
+                                            "20"
+                                        ],
+                                        "itemId": "col1",
+                                        "reference": "col1",
+                                        "store": "race1",
+                                        "width": 400
+                                    },
+                                    "configAlternates": {
+                                        "captions": "object",
+                                        "flex": "number",
+                                        "height": "auto",
+                                        "insetPadding": "object",
+                                        "itemId": "string",
+                                        "reference": "string",
+                                        "store": "store",
+                                        "width": "auto"
+                                    },
+                                    "name": "ColumnChart3D",
+                                    "designerId": "ac78fd21-df15-4fc6-b8eb-75a56f473c51",
+                                    "isBuiltIn": true,
+                                    "iconCls": "icon-column-chart",
+                                    "autoName": "ColumnChart3D",
+                                    "cn": [
+                                        {
+                                            "type": "Ext.chart.axis.Category3D",
+                                            "reference": {
+                                                "name": "axes",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "fields": [
+                                                    "translation"
+                                                ],
+                                                "position": "bottom",
+                                                "title": "Race"
+                                            },
+                                            "configAlternates": {
+                                                "fields": "typedarray",
+                                                "position": "string",
+                                                "title": "string"
+                                            },
+                                            "name": "My3DCategoryAxis",
+                                            "designerId": "d1902f73-90c7-49b5-af73-b41e6dc4daba",
+                                            "cn": [
+                                                {
+                                                    "type": "fixedfunction",
+                                                    "reference": {
+                                                        "name": "items",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|params": [
+                                                            "axis",
+                                                            "label",
+                                                            "layoutContext",
+                                                            "lastLabel"
+                                                        ],
+                                                        "fn": "renderer",
+                                                        "implHandler": [
+                                                            "",
+                                                            "label = label.split(\" - \")[0];",
+                                                            "return label;"
+                                                        ]
+                                                    },
+                                                    "configAlternates": {
+                                                        "designer|params": "typedarray",
+                                                        "fn": "string",
+                                                        "implHandler": "code"
+                                                    },
+                                                    "name": "renderer",
+                                                    "designerId": "f2aaa2c2-98de-4c36-8de3-8b32b4ed257a"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "Ext.chart.axis.Numeric3D",
+                                            "reference": {
+                                                "name": "axes",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "fields": [
+                                                    "value"
+                                                ],
+                                                "grid": [
+                                                    "{",
+                                                    "                odd: {",
+                                                    "                    fillStyle: 'rgba(245, 245, 245, 1.0)'",
+                                                    "                },",
+                                                    "                even: {",
+                                                    "                    fillStyle: 'rgba(255, 255, 255, 1.0)'",
+                                                    "                }",
+                                                    "            }"
+                                                ],
+                                                "position": "left"
+                                            },
+                                            "configAlternates": {
+                                                "fields": "typedarray",
+                                                "grid": "object",
+                                                "position": "string"
+                                            },
+                                            "name": "My3DNumericAxis",
+                                            "designerId": "981d553d-dedd-4345-b353-f2c12eb03a5d"
+                                        },
+                                        {
+                                            "type": "Ext.chart.series.Bar3D",
+                                            "reference": {
+                                                "name": "series",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "fullStackTotal": true,
+                                                "highlight": true,
+                                                "label": [
+                                                    "{",
+                                                    "    field: 'value',",
+                                                    "    display: 'insideEnd'",
+                                                    "}"
+                                                ],
+                                                "tooltip": [
+                                                    "{",
+                                                    "trackMouse: true,",
+                                                    "renderer: function(tooltip, record, item){",
+                                                    "",
+                                                    " var formatString = '0,000 (millions of USD)';",
+                                                    "",
+                                                    "var trans = record.get(\"translation\").split(\" - \");",
+                                                    "",
+                                                    "tooltip.setHtml(trans[1] + \": \"+record.get(\"value\"));",
+                                                    "}",
+                                                    "}"
+                                                ],
+                                                "xField": "translation",
+                                                "yField": [
+                                                    "value"
+                                                ]
+                                            },
+                                            "configAlternates": {
+                                                "fullStackTotal": "boolean",
+                                                "highlight": "boolean",
+                                                "label": "object",
+                                                "tooltip": "object",
+                                                "xField": "datafield",
+                                                "yField": "typedarray"
+                                            },
+                                            "name": "My3DBarSeries",
+                                            "designerId": "83459e46-6c7d-4aa9-9b9a-9d26d87652e3"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Ext.chart.PolarChart",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "captions": [
+                                            "{",
+                                            "    title: '% Cases By Age Range'",
+                                            " }"
+                                        ],
+                                        "colors": [
+                                            "[\"#115fa6\", \"#94ae0a\", \"#a61120\", \"#ff8809\", \"#ffd13e\", \"#a61187\", \"#24ad9a\", \"#7c7474\", \"#a66111\"]"
+                                        ],
+                                        "flex": 1,
+                                        "height": 300,
+                                        "innerPadding": 20,
+                                        "itemId": "pie2",
+                                        "reference": "pie2",
+                                        "store": "ageAtDiagnosis",
+                                        "width": 400
+                                    },
+                                    "configAlternates": {
+                                        "captions": "object",
+                                        "colors": "array",
+                                        "flex": "number",
+                                        "height": "auto",
+                                        "innerPadding": "number",
+                                        "itemId": "string",
+                                        "reference": "string",
+                                        "store": "store",
+                                        "width": "auto"
+                                    },
+                                    "name": "MyPieChart3D2",
+                                    "designerId": "f064ae2a-5578-4777-a167-a752cd900c56",
+                                    "isBuiltIn": true,
+                                    "iconCls": "icon-pie3d-chart",
+                                    "autoName": "MyPieChart3D",
+                                    "cn": [
+                                        {
+                                            "type": "Ext.chart.series.Pie3D",
+                                            "reference": {
+                                                "name": "series",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "angleField": "value",
+                                                "highlight": true,
+                                                "label": [
+                                                    "{",
+                                                    "                                                display: 'none',",
+                                                    "                                                field: 'translation'",
+                                                    "                                                }"
+                                                ],
+                                                "tooltip": [
+                                                    "{",
+                                                    "",
+                                                    "trackMouse: true,",
+                                                    "renderer: function(tooltip, record, item){",
+                                                    "",
+                                                    "",
+                                                    "var total = 0;",
+                                                    "",
+                                                    "record.store.each(function(rec){",
+                                                    "    total += rec.get(\"value\");",
+                                                    "});",
+                                                    "",
+                                                    "",
+                                                    "tooltip.setHtml(record.get('translation') + ': ' + Math.round(record.get('value')/ total * 100) + '%');",
+                                                    "}",
+                                                    "",
+                                                    "}"
+                                                ]
+                                            },
+                                            "configAlternates": {
+                                                "angleField": "datafield",
+                                                "highlight": "boolean",
+                                                "label": "object",
+                                                "tooltip": "object"
+                                            },
+                                            "name": "MyPie3DSeries4",
+                                            "designerId": "b553b6ba-a0c3-4a71-9fc7-bee174056ca7"
+                                        },
+                                        {
+                                            "type": "Ext.chart.interactions.Rotate",
+                                            "reference": {
+                                                "name": "interactions",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "name": "MyRotatePie3DInteraction9",
+                                            "designerId": "867cbb41-8e38-4c1e-8876-ee76aea729cd"
+                                        },
+                                        {
+                                            "type": "Ext.chart.legend.Legend",
+                                            "reference": {
+                                                "name": "legend",
+                                                "type": "object"
+                                            },
+                                            "codeClass": null,
+                                            "name": "MyLegend1",
+                                            "designerId": "396c4d11-212a-4855-b176-4976db18f61e"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.panel.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "itemId": "chart7",
+                        "layout": "fit",
+                        "title": "By Site"
+                    },
+                    "configAlternates": {
+                        "itemId": "string",
+                        "layout": "string",
+                        "title": "string"
+                    },
+                    "name": "MyPanel8",
+                    "designerId": "2ba251ce-7386-4702-94f3-9a631beb7024",
+                    "cn": [
+                        {
+                            "type": "Ext.tab.Tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "TabConfig6",
+                            "designerId": "3ddb852a-a398-41b9-a3c9-93f7f716ae3b"
+                        },
+                        {
+                            "type": "Ext.chart.CartesianChart",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "captions": [
+                                    "{",
+                                    " title: '# of Cases By Site'",
+                                    "",
+                                    "}"
+                                ],
+                                "flex": 1,
+                                "height": 250,
+                                "insetPadding": [
+                                    "20"
+                                ],
+                                "itemId": "col2",
+                                "reference": "col2",
+                                "store": "primarySite",
+                                "width": 400
+                            },
+                            "configAlternates": {
+                                "captions": "object",
+                                "flex": "number",
+                                "height": "auto",
+                                "insetPadding": "object",
+                                "itemId": "string",
+                                "reference": "string",
+                                "store": "store",
+                                "width": "auto"
+                            },
+                            "name": "ColumnChart3D1",
+                            "designerId": "680b0847-7e00-4526-853a-ba3678286187",
+                            "isBuiltIn": true,
+                            "iconCls": "icon-column-chart",
+                            "autoName": "ColumnChart3D",
+                            "cn": [
+                                {
+                                    "type": "Ext.chart.axis.Category3D",
+                                    "reference": {
+                                        "name": "axes",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fields": [
+                                            "translation"
+                                        ],
+                                        "position": "bottom",
+                                        "title": "Site"
+                                    },
+                                    "configAlternates": {
+                                        "fields": "typedarray",
+                                        "position": "string",
+                                        "title": "string"
+                                    },
+                                    "name": "My3DCategoryAxis",
+                                    "designerId": "1058aa35-4758-4cb5-bf86-0822da4aa422",
+                                    "cn": [
+                                        {
+                                            "type": "fixedfunction",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "designer|params": [
+                                                    "axis",
+                                                    "label",
+                                                    "layoutContext",
+                                                    "lastLabel"
+                                                ],
+                                                "fn": "renderer",
+                                                "implHandler": [
+                                                    "",
+                                                    "label = label.split(\" - \")[0];",
+                                                    "return label;"
+                                                ]
+                                            },
+                                            "configAlternates": {
+                                                "designer|params": "typedarray",
+                                                "fn": "string",
+                                                "implHandler": "code"
+                                            },
+                                            "name": "renderer",
+                                            "designerId": "52745245-3d43-4c0b-90df-399f72e4cd92"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Ext.chart.axis.Numeric3D",
+                                    "reference": {
+                                        "name": "axes",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fields": [
+                                            "value"
+                                        ],
+                                        "grid": [
+                                            "{",
+                                            "                odd: {",
+                                            "                    fillStyle: 'rgba(245, 245, 245, 1.0)'",
+                                            "                },",
+                                            "                even: {",
+                                            "                    fillStyle: 'rgba(255, 255, 255, 1.0)'",
+                                            "                }",
+                                            "            }"
+                                        ],
+                                        "position": "left"
+                                    },
+                                    "configAlternates": {
+                                        "fields": "typedarray",
+                                        "grid": "object",
+                                        "position": "string"
+                                    },
+                                    "name": "My3DNumericAxis",
+                                    "designerId": "cc9f497a-9469-4f61-b186-21b25acddb39"
+                                },
+                                {
+                                    "type": "Ext.chart.series.Bar3D",
+                                    "reference": {
+                                        "name": "series",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fullStackTotal": true,
+                                        "highlight": true,
+                                        "label": [
+                                            "{",
+                                            "    field: 'value',",
+                                            "    display: 'insideEnd'",
+                                            "}"
+                                        ],
+                                        "tooltip": [
+                                            "{",
+                                            "trackMouse: true,",
+                                            "renderer: function(tooltip, record, item){",
+                                            "",
+                                            " var formatString = '0,000 (millions of USD)';",
+                                            "",
+                                            "var trans = record.get(\"translation\").split(\" - \");",
+                                            "",
+                                            "tooltip.setHtml(trans[1] + \": \"+record.get(\"value\"));",
+                                            "}",
+                                            "}"
+                                        ],
+                                        "xField": "translation",
+                                        "yField": [
+                                            "value"
+                                        ]
+                                    },
+                                    "configAlternates": {
+                                        "fullStackTotal": "boolean",
+                                        "highlight": "boolean",
+                                        "label": "object",
+                                        "tooltip": "object",
+                                        "xField": "datafield",
+                                        "yField": "typedarray"
+                                    },
+                                    "name": "My3DBarSeries",
+                                    "designerId": "8d547289-ed96-4b7a-8ccb-a895a79f75ba"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.panel.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "itemId": "chart1",
+                        "layout": "fit",
+                        "title": "KM Chart"
+                    },
+                    "configAlternates": {
+                        "layout": "string",
+                        "title": "string",
+                        "itemId": "string"
+                    },
+                    "name": "MyPanel",
+                    "designerId": "1bd960c9-75cf-4951-97e5-edfc021af522",
+                    "cn": [
+                        {
+                            "type": "Ext.tab.Tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "TabConfig",
+                            "designerId": "2c9795fe-8669-482b-93b4-0f602ae7f483"
+                        },
+                        {
+                            "type": "Ext.Component",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "autoEl": [
+                                    "{",
+                                    "    tag: \"iframe\",",
+                                    "    src: \"http://52.90.197.198/d3graphs/trialKM.html\"",
+                                    "}"
+                                ],
+                                "itemId": "chart1Comp"
+                            },
+                            "configAlternates": {
+                                "autoEl": "object",
+                                "itemId": "string"
+                            },
+                            "name": "MyComponent",
+                            "designerId": "08cf4fed-95f7-46c9-bde4-4d4982151885",
+                            "cn": [
+                                {
+                                    "type": "viewcontrollereventbinding",
+                                    "reference": {
+                                        "name": "listeners",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fn": "onChart1CompAfterRender",
+                                        "implHandler": [
+                                            "var mongoQuery = this.checkChange();",
+                                            "this.update(mongoQuery);"
+                                        ],
+                                        "name": "afterrender",
+                                        "scope": "me"
+                                    },
+                                    "configAlternates": {
+                                        "fn": "string",
+                                        "implHandler": "code",
+                                        "name": "string",
+                                        "scope": "string"
+                                    },
+                                    "name": "onChart1CompAfterRender",
+                                    "designerId": "c41f4971-3d06-4a43-863f-4f986cca3fe4"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.panel.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "itemId": "chart2",
+                        "layout": "fit",
+                        "reference": "chart2",
+                        "title": "US Map"
+                    },
+                    "configAlternates": {
+                        "itemId": "string",
+                        "layout": "string",
+                        "title": "string",
+                        "reference": "string"
+                    },
+                    "name": "MyPanel1",
+                    "designerId": "7b47290f-ba16-463f-a880-78e3c98ba88f",
+                    "cn": [
+                        {
+                            "type": "Ext.tab.Tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "TabConfig1",
+                            "designerId": "2c385bcf-29d8-4b49-b45c-09017c5a7aa7"
+                        },
+                        {
+                            "type": "Ext.Component",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "autoEl": [
+                                    "{",
+                                    "                                tag: 'iframe',",
+                                    "                                src: 'http://52.90.197.198/d3graphs/USMap.html'",
+                                    "                                ",
+                                    "                                ",
+                                    "                                }"
+                                ],
+                                "itemId": "chart2Comp"
+                            },
+                            "configAlternates": {
+                                "autoEl": "object",
+                                "itemId": "string"
+                            },
+                            "name": "MyComponent1",
+                            "designerId": "516cce4c-a97d-4512-99c6-835609015b84",
+                            "cn": [
+                                {
+                                    "type": "viewcontrollereventbinding",
+                                    "reference": {
+                                        "name": "listeners",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fn": "onChart2CompAfterRender",
+                                        "implHandler": [
+                                            "var mongoQuery = this.checkChange();",
+                                            "this.update(mongoQuery);"
+                                        ],
+                                        "name": "afterrender",
+                                        "scope": "me"
+                                    },
+                                    "configAlternates": {
+                                        "fn": "string",
+                                        "implHandler": "code",
+                                        "name": "string",
+                                        "scope": "string"
+                                    },
+                                    "name": "onChart2CompAfterRender",
+                                    "designerId": "9f33e492-5943-4199-b188-b3e61901a2a6"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.panel.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "height": 535,
+                        "itemId": "chart3",
+                        "layout": "fit",
+                        "title": "County Map"
+                    },
+                    "configAlternates": {
+                        "height": "auto",
+                        "itemId": "string",
+                        "layout": "string",
+                        "title": "string"
+                    },
+                    "name": "MyPanel2",
+                    "designerId": "72165160-3d13-490c-8e23-8e2f69437619",
+                    "cn": [
+                        {
+                            "type": "Ext.tab.Tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "hidden": true
+                            },
+                            "configAlternates": {
+                                "hidden": "boolean"
+                            },
+                            "name": "TabConfig2",
+                            "designerId": "8acf1bbb-146f-4ec3-95ce-29a72e157621"
+                        },
+                        {
+                            "type": "Ext.Component",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "autoEl": [
+                                    "{",
+                                    "    tag: 'iframe',",
+                                    "    src: 'http://52.90.197.198/d3graphs/choropleth.html'",
+                                    "",
+                                    "}"
+                                ],
+                                "itemId": "chart3Comp"
+                            },
+                            "configAlternates": {
+                                "autoEl": "object",
+                                "itemId": "string"
+                            },
+                            "name": "MyComponent2",
+                            "designerId": "031279a2-fd85-4162-a7f9-1349c0e7485f"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.panel.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "hidden": true,
+                        "itemId": "chart4",
+                        "layout": "fit",
+                        "title": "Pie Chart"
+                    },
+                    "configAlternates": {
+                        "itemId": "string",
+                        "layout": "string",
+                        "title": "string",
+                        "hidden": "boolean"
+                    },
+                    "name": "MyPanel3",
+                    "designerId": "1fa021df-4610-4f92-841e-aa384872bc4b",
+                    "cn": [
+                        {
+                            "type": "Ext.tab.Tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "TabConfig3",
+                            "designerId": "fb16075a-a273-4fd8-a823-10fca5d50fe5"
+                        },
+                        {
+                            "type": "Ext.Component",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "autoEl": [
+                                    "{",
+                                    "tag: 'iframe',",
+                                    "src: 'http://52.90.197.198/d3graphs/Pie.html'",
+                                    "",
+                                    "}"
+                                ],
+                                "itemId": "chart4Comp"
+                            },
+                            "configAlternates": {
+                                "autoEl": "object",
+                                "itemId": "string"
+                            },
+                            "name": "MyComponent3",
+                            "designerId": "ad237c32-98ff-4071-bc0a-c07c2dfbd650"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.panel.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "hidden": true,
+                        "itemId": "chart6",
+                        "layout": "fit",
+                        "title": "Pie Chart"
+                    },
+                    "configAlternates": {
+                        "itemId": "string",
+                        "layout": "string",
+                        "title": "string",
+                        "hidden": "boolean"
+                    },
+                    "name": "MyPanel6",
+                    "designerId": "91264b62-49e5-47cf-9588-035c9aff1a9f",
+                    "cn": [
+                        {
+                            "type": "Ext.tab.Tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "TabConfig3",
+                            "designerId": "7de572be-1411-4365-ad6a-c73d509485f1"
+                        },
+                        {
+                            "type": "Ext.Component",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "autoEl": [
+                                    "{",
+                                    "tag: 'iframe',",
+                                    "src: 'http://52.90.197.198/d3graphs/Bar.html'",
+                                    "",
+                                    "}"
+                                ],
+                                "itemId": "chart6Comp"
+                            },
+                            "configAlternates": {
+                                "autoEl": "object",
+                                "itemId": "string"
+                            },
+                            "name": "MyComponent3",
+                            "designerId": "4329d31b-7741-4252-9535-a225375084d7"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.panel.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "itemId": "chart5",
+                        "layout": "fit",
+                        "title": "By County"
+                    },
+                    "configAlternates": {
+                        "itemId": "string",
+                        "layout": "string",
+                        "title": "string"
+                    },
+                    "name": "MyPanel9",
+                    "designerId": "a18bc53c-8d1e-4520-8e66-0140edfb3cba",
+                    "cn": [
+                        {
+                            "type": "Ext.tab.Tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "TabConfig5",
+                            "designerId": "7898e4c8-43de-4113-9cd1-e74ee8624952"
+                        },
+                        {
+                            "type": "Ext.Component",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "autoEl": [
+                                    "{",
+                                    "tag: 'iframe',",
+                                    "src: 'http://52.90.197.198/d3graphs/choroplethAll.html'",
+                                    "",
+                                    "}"
+                                ],
+                                "itemId": "chart5Comp"
+                            },
+                            "configAlternates": {
+                                "autoEl": "object",
+                                "itemId": "string"
+                            },
+                            "name": "MyComponent3",
+                            "designerId": "71dec560-e1d4-480b-932d-695631abbed5",
+                            "cn": [
+                                {
+                                    "type": "viewcontrollereventbinding",
+                                    "reference": {
+                                        "name": "listeners",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fn": "onChart5CompAfterRender",
+                                        "implHandler": [
+                                            "var mongoQuery = this.checkChange();",
+                                            "this.update(mongoQuery);"
+                                        ],
+                                        "name": "afterrender",
+                                        "scope": "me"
+                                    },
+                                    "configAlternates": {
+                                        "fn": "string",
+                                        "implHandler": "code",
+                                        "name": "string",
+                                        "scope": "string"
+                                    },
+                                    "name": "onChart5CompAfterRender",
+                                    "designerId": "a16d68d0-d334-4933-9dde-fd9405961be4"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "viewcontrollereventbinding",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onViewportBoxReady",
+                "implHandler": [
+                    "this.checkButtons(false);",
+                    "var mongoQuery = this.checkChange();",
+                    "this.update(mongoQuery);"
+                ],
+                "name": "boxready",
+                "scope": "me"
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code",
+                "name": "string",
+                "scope": "string"
+            },
+            "name": "onViewportBoxReady",
+            "designerId": "4defd304-8a90-4b65-a0e3-5cefa7f623b9"
+        }
+    ]
+}

@@ -1,0 +1,33 @@
+{
+    "type": "Ext.app.Application",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "name": "XMLParser",
+        "requires": [
+            "interaction.itemhighlight"
+        ],
+        "stores": [
+            "MyTreeStore",
+            "sex",
+            "race1",
+            "vitalStatus",
+            "ageAtDiagnosis",
+            "primarySite"
+        ],
+        "views": [
+            "XMLParserViewport"
+        ]
+    },
+    "configAlternates": {
+        "name": "string",
+        "stores": "typedarray",
+        "views": "typedarray",
+        "requires": "typedarray"
+    },
+    "name": "Application",
+    "designerId": "application"
+}
