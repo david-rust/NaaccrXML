@@ -65,7 +65,7 @@ d3.json("stateAbbreviations.json", function(statenames) {
 	});
 
 // Load in my states data!
-d3.json("http://52.90.197.198:5000/charts/map" +location.search, function(data) {
+d3.json("http://18.206.119.53:5000/charts/map" +location.search, function(data) {
 	var dataArray = [];
 	for (var d = 0; d < data.length; d++) {
 		dataArray.push(parseFloat(data[d].count))

@@ -34,7 +34,7 @@ var svg = d3.select("body").append("svg")
           "translate(" + margin.left + "," + margin.top + ")");
 
 // get the data
-d3.json("http://52.90.197.198:5000/charts/bar"+location.search, function(error, data) {
+d3.json("http://18.206.119.53:5000/charts/bar"+location.search, function(error, data) {
   if (error) throw error;
 
   // format the data

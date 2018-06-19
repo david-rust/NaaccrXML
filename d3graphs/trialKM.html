@@ -32,7 +32,7 @@ var w = 768, h=480, m=20, max = min = 0;
 //progression: progression = Percent that die during this period
 //prob: prob = Product of survival probabilities up to and including this period	
 
-d3.json("http://52.90.197.198:5000/charts/survival"+location.search, function(data) {
+d3.json("http://18.206.119.53:5000/charts/survival"+location.search, function(data) {
 /* Computed Data progression, survival, prob, censored */
 for(var a=0; a<data.treatments.length; a++){
 	for (var b=0; b<data.treatments[a].length; b++){

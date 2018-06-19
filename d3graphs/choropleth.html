@@ -152,7 +152,7 @@ var color = d3.scaleThreshold()
 var lowColor = '#f9f9f9'
 var highColor = '#bc2a66'
 // Load in counties data and create a range of values
-d3.json("http://52.90.197.198:5000/charts/map/" + stateNameTOUSPS[theState] + theQueryString, function(data) {
+d3.json("http://18.206.119.53:5000/charts/map/" + stateNameTOUSPS[theState] + theQueryString, function(data) {
   var dataArray = [];
   alert(data.length);
   for (var d = 0; d < data.length; d++) {

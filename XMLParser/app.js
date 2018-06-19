@@ -91782,7 +91782,7 @@ Ext.define('XMLParser.view.XMLParserViewportViewController', {extend:Ext.app.Vie
   if (!Ext.isEmpty(mongoQuery)) {
     params.filter = mongoQuery;
   }
-  Ext.Ajax.request({url:'http://52.90.197.198:5000/counts/', params:params, success:function(response) {
+  Ext.Ajax.request({url:'http://18.206.119.53:5000/counts/', params:params, success:function(response) {
     var countsObj = Ext.decode(response.responseText).data;
     controller.updateCounts(countsObj);
   }, failure:function(response) {
@@ -91865,9 +91865,9 @@ Ext.define('XMLParser.view.XMLParserViewportViewController', {extend:Ext.app.Vie
   var comp4 = this.getView().down('#chart4Comp').getEl();
   var comp5 = this.getView().down('#chart5Comp').getEl();
   var comp6 = this.getView().down('#chart6Comp').getEl();
-  comp1.dom.src = 'http://52.90.197.198/d3graphs/trialKM.html' + filter;
-  comp2.dom.src = 'http://52.90.197.198/d3graphs/USMap.html' + filter;
-  comp5.dom.src = 'http://52.90.197.198/d3graphs/choropleth.html' + filer;
+  comp1.dom.src = 'http://18.206.119.53/d3graphs/trialKM.html' + filter;
+  comp2.dom.src = 'http://18.206.119.53/d3graphs/USMap.html' + filter;
+  comp5.dom.src = 'http://18.206.119.53/d3graphs/choropleth.html' + filer;
 }, checkButtons:function(checked) {
   var store = Ext.getStore('MyTreeStore');
   store.each(function(record) {
@@ -91981,7 +91981,7 @@ Ext.define('XMLParser.view.XMLParserViewportViewController', {extend:Ext.app.Vie
   } else {
     filter = '';
   }
-  var downloadUrl = 'http://52.90.197.198:5000/export/' + filter;
+  var downloadUrl = 'http://18.206.119.53:5000/export/' + filter;
   if (Ext.getElementById('hiddenform-iframe') != null) {
     Ext.removeNode(Ext.getElementById('hiddenform-iframe'));
   }
@@ -92031,9 +92031,9 @@ items:[{xtype:'polar', reference:'pie1', flex:1, height:300, itemId:'pie1', widt
   var formatString = '0,000 (millions of USD)';
   var trans = record.get('translation').split(' - ');
   tooltip.setHtml(trans[1] + ': ' + record.get('value'));
-}}, xField:'translation', yField:['value'], fullStackTotal:true}]}]}, {xtype:'panel', itemId:'chart1', layout:'fit', title:'KM Chart', items:[{xtype:'component', autoEl:{tag:'iframe', src:'http://52.90.197.198/d3graphs//trialKM.html'}, itemId:'chart1Comp'}]}, {xtype:'panel', reference:'chart2', itemId:'chart2', layout:'fit', title:'US Map', items:[{xtype:'component', autoEl:{tag:'iframe', src:'http://52.90.197.198/d3graphs/USMap.html'}, itemId:'chart2Comp'}]}, {xtype:'panel', height:535, itemId:'chart3', 
-layout:'fit', title:'County Map', tabConfig:{xtype:'tab', hidden:true}, items:[{xtype:'component', autoEl:{tag:'iframe', src:'http://52.90.197.198/d3graphs/choropleth.html'}, itemId:'chart3Comp'}]}, {xtype:'panel', hidden:true, itemId:'chart4', layout:'fit', title:'Pie Chart', items:[{xtype:'component', autoEl:{tag:'iframe', src:'http://52.90.197.198/d3graphs/Pie.html'}, itemId:'chart4Comp'}]}, {xtype:'panel', hidden:true, itemId:'chart6', layout:'fit', title:'Pie Chart', items:[{xtype:'component', 
-autoEl:{tag:'iframe', src:'http://52.90.197.198/d3graphs/Bar.html'}, itemId:'chart6Comp'}]}, {xtype:'panel', itemId:'chart5', layout:'fit', title:'By County', items:[{xtype:'component', autoEl:{tag:'iframe', src:'http://52.90.197.198/d3graphs/choropleth.html'}, itemId:'chart5Comp'}]}]}], listeners:{boxready:'onViewportBoxReady'}});
+}}, xField:'translation', yField:['value'], fullStackTotal:true}]}]}, {xtype:'panel', itemId:'chart1', layout:'fit', title:'KM Chart', items:[{xtype:'component', autoEl:{tag:'iframe', src:'http://18.206.119.53/d3graphs//trialKM.html'}, itemId:'chart1Comp'}]}, {xtype:'panel', reference:'chart2', itemId:'chart2', layout:'fit', title:'US Map', items:[{xtype:'component', autoEl:{tag:'iframe', src:'http://18.206.119.53/d3graphs/USMap.html'}, itemId:'chart2Comp'}]}, {xtype:'panel', height:535, itemId:'chart3', 
+layout:'fit', title:'County Map', tabConfig:{xtype:'tab', hidden:true}, items:[{xtype:'component', autoEl:{tag:'iframe', src:'http://18.206.119.53/d3graphs/choropleth.html'}, itemId:'chart3Comp'}]}, {xtype:'panel', hidden:true, itemId:'chart4', layout:'fit', title:'Pie Chart', items:[{xtype:'component', autoEl:{tag:'iframe', src:'http://18.206.119.53/d3graphs/Pie.html'}, itemId:'chart4Comp'}]}, {xtype:'panel', hidden:true, itemId:'chart6', layout:'fit', title:'Pie Chart', items:[{xtype:'component', 
+autoEl:{tag:'iframe', src:'http://18.206.119.53/d3graphs/Bar.html'}, itemId:'chart6Comp'}]}, {xtype:'panel', itemId:'chart5', layout:'fit', title:'By County', items:[{xtype:'component', autoEl:{tag:'iframe', src:'http://18.206.119.53/d3graphs/choropleth.html'}, itemId:'chart5Comp'}]}]}], listeners:{boxready:'onViewportBoxReady'}});
 Ext.Loader.setConfig({});
 Ext.application({stores:['MyTreeStore', 'sex', 'race1', 'vitalStatus', 'ageAtDiagnosis', 'primarySite'], views:['XMLParserViewport'], name:'XMLParser', launch:function() {
   Ext.create('XMLParser.view.XMLParserViewport');
